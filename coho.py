@@ -35,7 +35,7 @@ def get_summary(pages,cohere_api_key,company,poc,role):
         embeddings,
         location=":memory:",
         collection_name="my_documents",
-        distance_func="Dot",
+        distance_func="cosine",
     )
     prompt_template = """Text: {context}
     Question: {question}
@@ -52,7 +52,7 @@ def get_summary(pages,cohere_api_key,company,poc,role):
     poc
     role
     
-    question = f'''Give me a 100 word email message which we have to send to {poc},to apply for a {role} job in {company}. '''
+    question = f'''Give me a 100 word email message which we have to send to {poc},to apply for a {role} job in {company}. Do not add salutations.'''
 
     if question:
         chain_type_kwargs = {"prompt": PROMPT}
@@ -75,6 +75,8 @@ def get_summary(pages,cohere_api_key,company,poc,role):
         updated_text = '.'.join(lines[:-1])
 
         updated_text=updated_text+"."
+
+        updated_text=updated_text[1:]
 
         return updated_text
     

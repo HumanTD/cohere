@@ -35,7 +35,7 @@ try:
         embeddings,
         location=":memory:",
         collection_name="my_documents",
-        distance_func="Dot",
+        distance_func="cosine",
     )
     prompt_template = """Text: {context}
     Question: {question}
@@ -77,7 +77,7 @@ try:
         updated_text = '.'.join(lines[:-1])
 
         updated_text=updated_text+"."
-        
+
         st.write(updated_text)
 
 
