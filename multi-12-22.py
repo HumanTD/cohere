@@ -23,7 +23,7 @@ model_url=os.getenv("model_url")
 
 
 def bot():
-    with open('Resume_Devansh Gupta.pdf', "rb") as f:
+    with open('sample_resume.pdf', "rb") as f:
         loader = PyPDFLoader(f.name)
         pages = loader.load_and_split()
         return pages
