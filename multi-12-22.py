@@ -79,9 +79,6 @@ except Exception as e:
     print(f"An error occurred: {str(e)}")
 
 
-@app.route('/', methods=['GET', 'POST'])
-def home():
-    return "Summary Generator"
 
 
 
