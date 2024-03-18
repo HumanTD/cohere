@@ -11,9 +11,6 @@ import os
 import streamlit as st
 import flask as Flask
 
-
-app=Flask(__name__)
-
 load_dotenv()
 
 
