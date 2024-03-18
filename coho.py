@@ -8,27 +8,27 @@ from langchain_community.document_loaders import TextLoader
 from langchain_community.document_loaders import PyPDFLoader
 from dotenv import load_dotenv
 import os
-import streamlit as st
-import flask as Flask
+import flask as Flask, json
+import requests
 
 load_dotenv()
 
+def auth():
+    cohere_api_key = os.getenv("cohere_api_key")
+    authorization = os.getenv("authorization")
+    model_url=os.getenv("model_url")
 
-cohere_api_key = os.getenv("cohere_api_key")
-authorization = os.getenv("authorization")
-model_url=os.getenv("model_url")
+    return cohere_api_key,authorization,model_url
 
 
-def bot():
-    with open('sample_resume.pdf', "rb") as f:
+def reader_bot(file_path):
+    with open(file_path, "rb") as f:
         loader = PyPDFLoader(f.name)
         pages = loader.load_and_split()
         return pages
     
 
-pages=bot()
-
-try:
+def get_summary(pages,cohere_api_key,company,poc,role):
     embeddings = CohereEmbeddings(model="embed-english-v3.0", cohere_api_key=cohere_api_key)
     store = Qdrant.from_documents(
         pages,
@@ -47,17 +47,14 @@ try:
     )
 
     chain_type_kwargs = {"prompt": PROMPT}
-    prompt = [{"role": "system", "content": prompt_template}]
-    for message in prompt:
-        if message["role"] == "user":
-            print(message["content"])
-        elif message["role"] == "assistant":
-            print(message["content"])
-
-    question = st.text_input(label='input')
+    
+    company
+    poc
+    role
+    
+    question = f'''Give me a 100 word email message which we have to send to {poc},to apply for a {role} job in {company}. '''
 
     if question:
-        prompt.append({"role": "user", "content": question})
         chain_type_kwargs = {"prompt": PROMPT}
 
         qa = RetrievalQA.from_chain_type(
@@ -69,6 +66,7 @@ try:
                 )
         
         answer = qa.invoke({"query": question})
+
         result = answer["result"].replace("\n", "").replace("Answer:", "").replace("mentioned in the text:","").replace("According to the text you provided,","").replace("According to the provided text, ","")
 
         lines = result.split('.')
@@ -77,15 +75,18 @@ try:
         updated_text = '.'.join(lines[:-1])
 
         updated_text=updated_text+"."
-        
-        st.write(updated_text)
 
+        return updated_text
+    
 
+def get_pdf(url):
+    response = requests.get(url)
 
-except Exception as e:
-    print(f"An error occurred: {str(e)}")
+    with open('sample.pdf', 'wb') as f:
+        f.write(response.content)
 
-
-
+# cohere_api_key, _, _ = auth()
+# pages = reader_bot()
+# result = get_summary(pages, cohere_api_key)
 
 
