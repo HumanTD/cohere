@@ -78,7 +78,12 @@ def get_summary(pages,cohere_api_key,company,poc,role):
 
         updated_text=updated_text[1:]
 
-        return updated_text
+        quote_index = updated_text.find('"')
+
+        # Extract text after the double quotes
+        extracted_text = updated_text[quote_index + 1:]
+
+        return extracted_text
     
 
 def get_pdf(url):

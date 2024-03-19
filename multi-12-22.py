@@ -78,7 +78,12 @@ try:
 
         updated_text=updated_text+"."
 
-        st.write(updated_text)
+        quote_index = updated_text.find('"')
+
+        # Extract text after the double quotes
+        extracted_text = updated_text[quote_index + 1:]
+
+        st.write(extracted_text)
 
 
 

@@ -1,5 +1,6 @@
 from coho import reader_bot,auth,get_summary,get_pdf
 from flask import Flask, jsonify,request
+import os
 
 app = Flask(__name__)
 
@@ -21,6 +22,8 @@ def home():
         result={
             'message':message
         }
+        
+        os.remove('sample.pdf')
     
         return jsonify(result)
         # except:
